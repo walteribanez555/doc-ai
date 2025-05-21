@@ -28,7 +28,7 @@ const generativeModel = vertexAI.getGenerativeModel({
       threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE
     }
   ],
-  generationConfig: { maxOutputTokens: 256 },
+  generationConfig: { maxOutputTokens: 1024 },
   systemInstruction: {
     role: 'system',
     parts: [{ text: 'For example, you are a helpful customer service agent.' }]
@@ -52,43 +52,44 @@ app.post('/generate', async (req, res) => {
 
     // Build the prompt as specified
     const prompt = `
-You are a system that extracts structured field metadata from documents.
+      You are a system that extracts structured field metadata from documents.
 
-Given:
-- A summary of a document
-- A list of words representing important details (field hints)
+      Given:
+      - A summary of a document
+      - A list of words representing important details (field hints)
 
-Your task is to generate a JSON object with the following structure:
+      Your task is to generate a JSON object with the following structure:
 
-{
-  "fields": [
-    {
-      "name": string,           // concise machine-readable field name in camelCase
-      "type": string,           // one of: "string", "number", "boolean", "date", or "enum"
-      "description": string     // human-readable description of what the field is
-    },
-    ...
-  ]
-}
+      {
+        "fields": [
+          {
+            "name": string,           // concise machine-readable field name in camelCase
+            "type": string,           // one of: "string", "number", "boolean", "date", or "enum"
+            "description": string     // human-readable description of what the field is
+            "token": string,           // token used to identify the field in the document
+          },
+          ...
+        ]
+      }
 
-Rules:
-- Use the list of detail-related words as a guide for what fields to include
-- Infer type and description based on the summary and context
-- If uncertain, default to type "string"
-- Do not include extra text outside the JSON
+      Rules:
+      - Use the list of detail-related words as a guide for what fields to include
+      - Infer type and description based on the summary and context
+      - If uncertain, default to type "string"
+      - Do not include extra text outside the JSON
 
----
+      ---
 
-Summary:
-"""
-${summary || ''}
-"""
+      Summary:
+      """
+      ${summary || ''}
+      """
 
-Details:
-${JSON.stringify(list || [])}
+      Details:
+      ${JSON.stringify(list || [])}
 
-Respond with only the JSON.
-`;
+      Respond with only the JSON.
+    `;
 
     const request = {
       contents: [
