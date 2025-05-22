@@ -14,7 +14,7 @@ const {
   VertexAI
 } = require('@google-cloud/vertexai');
 
-const project = 'jovial-coral-456321-c6';
+const project = 'firm-region-450902-j1';
 const location = 'us-central1';
 const textModel = 'gemini-2.0-flash-001';
 
