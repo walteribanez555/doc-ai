@@ -57,6 +57,7 @@ app.post('/generate', async (req, res) => {
       Given:
       - A summary of a document
       - A list of words representing important details (field hints)
+      - A Json Object with the data about the project, the client, and the contract_template
 
       Your task is to generate a JSON object with the following structure:
 
@@ -67,6 +68,7 @@ app.post('/generate', async (req, res) => {
             "type": string,           // one of: "string", "number", "boolean", "date", or "enum"
             "description": string     // human-readable description of what the field is
             "token": string,           // token used to identify the field in the document
+            "value": string,           // Value base on the Json Object with the data about the project, the client, and the contract_template and the summary
           },
           ...
         ]
