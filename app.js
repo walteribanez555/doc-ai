@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 app.post('/generate', async (req, res) => {
   try {
     // Extract summary and list from request body
-    const { summary, list } = req.body;
+    const { summary, list, project } = req.body;
 
     // Log or process the extracted data
     console.log('Summary:', summary);
@@ -89,6 +89,11 @@ app.post('/generate', async (req, res) => {
 
       Details:
       ${JSON.stringify(list || [])}
+
+      Json Object:
+      ${JSON.stringify(project || {})}
+      ---
+
 
       Respond with only the JSON.
     `;
